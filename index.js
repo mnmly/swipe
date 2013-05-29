@@ -51,6 +51,9 @@ Emitter(Swipe.prototype);
 
 Swipe.prototype.refresh = function(){
   var children = this.children();
+  var item = children[0];
+  var itemStyle = style(item);
+  var itemMargin = parseInt(itemStyle['marginRight'], 10) + parseInt(itemStyle['marginLeft'], 10);
   var total = children.length;
   var i = children.indexOf(this.currentEl);
 
@@ -62,9 +65,16 @@ Swipe.prototype.refresh = function(){
   }
 
   this.total = total;
+  this.itemWidth = item.getBoundingClientRect().width + itemMargin;
   this.childWidth = this.el.getBoundingClientRect().width;
+  this.offset = (this.childWidth - this.itemWidth) / 2;
+  if (0 === itemMargin) {
+    this.itemWidth = this.childWidth()
+    this.offset = 0;
+  }
   // TODO: remove + 10px. arbitrary number to give extra room for zoom changes
-  this.width = Math.ceil(this.childWidth * this.total) + 10;
+  // this.width = Math.ceil(this.childWidth * this.total) + 10;
+  this.width = Math.ceil(this.itemWidth * this.total) + 10;
   this.child.style.width = this.width + 'px';
   this.child.style.height = this.height + 'px';
   if (null != this.current && this.current > -1) {
@@ -168,7 +178,8 @@ Swipe.prototype.ontouchmove = function(e){
   var dir = this.dx < 0 ? 1 : 0;
   if (this.isFirst() && 0 == dir) this.dx /= 2;
   if (this.isLast() && 1 == dir) this.dx /= 2;
-  this.translate((i * w) + -this.dx);
+  this.translate((i * w - this.offset) + -this.dx);
+
 };
 
 /**
@@ -345,7 +356,7 @@ Swipe.prototype.show = function(i, ms, options){
   options = options || {};
   if (null == ms) ms = this._duration;
   i = Math.max(0, Math.min(i, this.total - 1));
-  var x = this.childWidth * i;
+  var x = this.itemWidth * i - this.offset;
   var children = this.children();
   this.current = i;
   this.currentEl = children[i];

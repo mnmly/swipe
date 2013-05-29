@@ -26,6 +26,7 @@ function Swipe(el) {
   if (!(this instanceof Swipe)) return new Swipe(el);
   if (!el) throw new TypeError('Swipe() requires an element');
   this.el = el;
+  this.isRelative = /relative/.test(this.el.className);
   this.child = el.children[0];
   this.currentEl = this.child.children[0];
   this.current = 0;
@@ -53,7 +54,10 @@ Swipe.prototype.refresh = function(){
   var children = this.children();
   var item = children[0];
   var itemStyle = style(item);
-  var itemMargin = parseInt(itemStyle['marginRight'], 10) + parseInt(itemStyle['marginLeft'], 10);
+  var itemMarginLeft = parseInt(itemStyle['marginRight'], 10);
+  var itemMarginRight = parseInt(itemStyle['marginLeft'], 10);
+  var itemMargin = itemMarginLeft + itemMarginRight;
+  
   var total = children.length;
   var i = children.indexOf(this.currentEl);
 
@@ -71,6 +75,14 @@ Swipe.prototype.refresh = function(){
   if (0 === itemMargin) {
     this.itemWidth = this.childWidth()
     this.offset = 0;
+  }
+
+  if (this.isRelative) {
+    for (var i = 0; i < children.length; i += 1) {
+      children[i].style.width = (this.itemWidth - itemMargin) + 'px';
+      children[i].style.marginLeft = itemMarginLeft + 'px';
+      children[i].style.marginRight = itemMarginRight + 'px';
+    }
   }
   // TODO: remove + 10px. arbitrary number to give extra room for zoom changes
   // this.width = Math.ceil(this.childWidth * this.total) + 10;

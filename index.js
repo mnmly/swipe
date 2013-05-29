@@ -79,13 +79,13 @@ Swipe.prototype.refresh = function(){
 
   if (this.isRelative) {
     for (var i = 0; i < children.length; i += 1) {
-      children[i].style.width = (this.itemWidth - itemMargin) + 'px';
-      children[i].style.marginLeft = itemMarginLeft + 'px';
-      children[i].style.marginRight = itemMarginRight + 'px';
+      var childStyle = children[i].style;
+      childStyle.width = (this.itemWidth - itemMargin) + 'px';
+      childStyle.marginLeft = itemMarginLeft + 'px';
+      childStyle.marginRight = itemMarginRight + 'px';
     }
   }
   // TODO: remove + 10px. arbitrary number to give extra room for zoom changes
-  // this.width = Math.ceil(this.childWidth * this.total) + 10;
   this.width = Math.ceil(this.itemWidth * this.total) + 10;
   this.child.style.width = this.width + 'px';
   this.child.style.height = this.height + 'px';

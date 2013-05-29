@@ -186,11 +186,14 @@ Swipe.prototype.ontouchmove = function(e){
   // have the preventDefault method. e.preventDefault() prevents
   // multiaxis scrolling when moving from left to right
   (ev || e).preventDefault();
-
+  
+  var offsetX = (1 + i * 2) * this.offset;
   var dir = this.dx < 0 ? 1 : 0;
   if (this.isFirst() && 0 == dir) this.dx /= 2;
   if (this.isLast() && 1 == dir) this.dx /= 2;
-  this.translate((i * w - this.offset) + -this.dx);
+  // this.translate((i * w - this.offset) + -this.dx);
+  var x = (i * w - offsetX) + -this.dx;
+  this.translate(x);
 
 };
 

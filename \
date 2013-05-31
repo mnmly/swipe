@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Question Card proto</title>
     <link rel="stylesheet" href="../build/build.css">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
     <style>
@@ -97,6 +96,7 @@
       <ul>
         <li>
           <div class="reader">
+            <h1>Do you mainly purchase from nike for yourself or a loved one?</h1>
             <p>This is the first example page. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id mauris arcu. Ut vestibulum,</p>
             <a href='#answer'>Next</a>
           </div>
@@ -142,7 +142,6 @@
     <script>
       var swipe = require('swipe');
       var el = document.querySelector('#container');
-      var remap = require('remap');
       var cats = swipe(el);
       var style = require('computed-style');
       var dots = [];
@@ -153,11 +152,9 @@
         dot.className = 'dot';
         dots.push(dot);
         document.getElementById('dots').appendChild(dot);
-        li.querySelector('a').addEventListener('touchstart', function(e){
+        li.querySelector('a').addEventListener('click', function(e){
           e.preventDefault();
-          setTimeout(function(){
-            cats.next();
-          }, 50);
+          cats.next();
         }, false)
       }
       cats.on('show', function(index){
@@ -169,21 +166,12 @@
             dot.classList.remove('active')
           }
         }
-      });
-      var bg = document.querySelector('.bg'),
-          bgOffset = 200,
-          bgX = 0;
-      bg.style.left = -bgOffset / 2 + 'px';
-      var getPosition = function(){
+      })
+      setInterval(function(){
         var matrix = getComputedStyle(cats.child).webkitTransform;
         var flagments = matrix.split(',');
-        target = remap(-parseInt( flagments[4], 10 ), 40, cats.child.offsetWidth, 0, bgOffset);
-        bgX += (target - bgX) * 0.045;
-        bg.style.webkitTransform = 'translate3d(' + bgX + 'px, 0, 0)'
-        webkitRequestAnimationFrame(getPosition);
-      };
-
-      getPosition();
+        console.log( parseInt( flagments[4],10 ) );;
+      }, 20);
     </script>
   </body>
 </html>

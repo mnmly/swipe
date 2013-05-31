@@ -73,7 +73,7 @@ Swipe.prototype.refresh = function(){
   this.childWidth = this.el.getBoundingClientRect().width;
   this.offset = (this.childWidth - this.itemWidth) / 2;
   if (0 === itemMargin) {
-    this.itemWidth = this.childWidth()
+    this.itemWidth = this.childWidth;
     this.offset = 0;
   }
 
@@ -377,7 +377,9 @@ Swipe.prototype.show = function(i, ms, options){
   this.currentEl = children[i];
   this.transitionDuration(ms);
   this.translate(x);
-  if (!options.silent) this.emit('show', this.current);
+  if (!options.silent){
+    this.emit('show', this.current);
+  }
   return this;
 };
 
